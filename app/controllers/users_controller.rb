@@ -57,7 +57,6 @@ class UsersController < ApplicationController
 
   # DELETE /users/1 or /users/1.json
   def destroy
-    @u = @user
     @user.destroy
   end
 

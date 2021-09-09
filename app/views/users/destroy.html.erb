@@ -1,7 +1,9 @@
 <h1>User Destroyed</h1>
 Destroyed user :
 </br>
-Name: <%= @u.name %> Gmail: <%= @u.email %> 
+Name: <%= @user.name %> 
+</br>
+Gmail: <%= @user.email %> 
 </br>
 <%= link_to 'Back', users_path %>
-<%= link_to 'Restore', "/create_fast?name=#{u.name}&email=#{u.email}" %>
+<%= link_to 'Restore', "/create_fast?name=#{@user.name}&email=#{@user.email}" %>
