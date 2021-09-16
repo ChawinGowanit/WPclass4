@@ -1,8 +1,22 @@
 <h1>Create Fast!!</h1>
 Create user :
-</br>
-Name: <%= @user.name %> 
-</br>
-Gmail: <%= @user.email %> 
-</br>
+<p>
+  <strong>Email:</strong>
+  <%= @user.email %>
+</p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @user.name %>
+</p>
+
+<p>
+  <strong>Address:</strong>
+  <%= @user.address %>
+</p>
+
+<p>
+  <strong>Postal Code:</strong>
+  <%= @user.postal_code%>
+</p>
 <%= link_to 'Back', users_path %>
