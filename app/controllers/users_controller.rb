@@ -37,10 +37,11 @@ class UsersController < ApplicationController
   def create_fast
       uname = params[:name]
       umail = params[:email]
+      upass = params[:pass]
       uaddress = params[:address]
       upost = params[:postal_code]
 
-      @user = User.create(name:uname,email:umail,address:uaddress,postal_code:upost)
+      @user = User.create(name:uname,email:umail,address:uaddress,postal_code:upost,pass:upass)
 
   end
 
@@ -71,6 +72,6 @@ class UsersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def user_params
-      params.require(:user).permit(:email, :name, :address, :postal_code)
+      params.require(:user).permit(:email, :pass, :name, :address, :postal_code)
     end
 end

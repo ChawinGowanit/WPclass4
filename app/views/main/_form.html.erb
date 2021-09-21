@@ -1,0 +1,15 @@
+<%= form_with url: "/main", method: :get do |form| %>
+  </br>
+    <%= form.label :email, "User Name:" %>
+    <%= form.text_field :email %>
+  </br>
+  </br>
+    <%= form.label :pass, "Pass Name:" %>
+    <%= form.text_field :pass %>
+  </br>
+  
+  </br>
+    <%= form.submit "log in" %>
+  </br>
+
+<% end %>

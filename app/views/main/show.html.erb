@@ -1,0 +1,64 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Email:</strong>
+  <%= @suser .email %>
+</p>
+
+<p>
+  <strong>Password:</strong>
+  <%= @suser .pass %>
+</p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @suser .name %>
+</p>
+
+<p>
+  <strong>Address:</strong>
+  <%= @suser .address %>
+</p>
+
+<p>
+  <strong>Postal Code:</strong>
+  <%= @suser .postal_code%>
+</p>
+<%= link_to 'Edit Profile', edit_user_path(@suser) %>
+
+<p>
+  <strong>Posts:</strong>
+  <br>
+  <%= link_to 'Create New Post', new_post_path%>
+
+    <table>
+  <thead>
+    <tr>
+      <th><strong>Message:</strong> </th>
+      <th><strong> Created At: </strong></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @up.each do |post| %>
+      <tr>
+        <td><%= post.msg %></td>
+        <td><%= post.created_at %></td>
+        <td><%= link_to 'Edit', edit_post_path(post.id) %></td>
+        <td><%= link_to 'Destroy', post, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+
+
+</p>
+
+
+<%= link_to 'Back', main_path%>
+
+
