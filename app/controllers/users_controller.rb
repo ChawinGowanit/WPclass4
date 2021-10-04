@@ -73,16 +73,13 @@ class UsersController < ApplicationController
   def check
     @umail = params[:email]
     @upass = params[:pass]
-    @allusers = User.all
-    @found = false
-    puts @upass
-    @allusers.each do |u|
-      if @umail == u.email && @upass == u.pass
-          redirect_to user_path(u.id), notice: "User login."
-          @found = true
-      end
+    @u = User.find_by(email:@umail)
+    @check = false
+    if @u && @u.authenticate(@upass)
+          redirect_to user_path(@u.id), notice: "User login."
+          check = true
     end
-    if @found == false
+    if check == false
       render :_invalid
     end
   end
@@ -96,7 +93,6 @@ class UsersController < ApplicationController
   end
   def addpost
       @post = Post.new(post_params)
-      @post.user_id = params[:user_id]
       if @post.save
         redirect_to user_url(@post.user_id), notice: "Post was successfully created."
       end
@@ -129,7 +125,7 @@ class UsersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def user_params
-      params.require(:user).permit(:email, :pass, :name, :address, :postal_code)
+      params.require(:user).permit(:email, :password, :name, :address, :postal_code)
     end
     def post_params
       params.require(:post).permit(:user_id, :msg)
