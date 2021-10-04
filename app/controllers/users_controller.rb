@@ -8,6 +8,8 @@ class UsersController < ApplicationController
 
   # GET /users/1 or /users/1.json
   def show
+    @posts = User.find(@user.id).posts
+
   end
 
   # GET /users/new
@@ -64,6 +66,61 @@ class UsersController < ApplicationController
     @user.destroy
   end
 
+  def login
+
+  end
+
+  def check
+    @umail = params[:email]
+    @upass = params[:pass]
+    @allusers = User.all
+    @found = false
+    puts @upass
+    @allusers.each do |u|
+      if @umail == u.email && @upass == u.pass
+          redirect_to user_path(u.id), notice: "User login."
+          @found = true
+      end
+    end
+    if @found == false
+      render :_invalid
+    end
+  end
+
+  def invalid
+  end
+
+  def newpost
+    @post = Post.new()
+    @post.user_id = params[:user_id]
+  end
+  def addpost
+      @post = Post.new(post_params)
+      @post.user_id = params[:user_id]
+      if @post.save
+        redirect_to user_url(@post.user_id), notice: "Post was successfully created."
+      end
+  end
+    
+  def editpost
+      @user = User.find(params[:user_id])
+      @post = @user.posts.find(params[:post_id])
+  end
+    
+  def updatepost
+      @user = User.find(params[:user_id])
+      @post = @user.posts.find(params[:post_id])
+      @post.update(post_params)
+      redirect_to user_url(@user.id), notice: "Edit post successfully."
+  end
+    
+  def deletepost
+      @user = User.find(params[:user_id])
+      @post = @user.posts.find(params[:post_id])
+      @post.destroy()
+      redirect_to user_url(@user.id), notice: "Delete post successfully."
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user
@@ -74,4 +131,9 @@ class UsersController < ApplicationController
     def user_params
       params.require(:user).permit(:email, :pass, :name, :address, :postal_code)
     end
+    def post_params
+      params.require(:post).permit(:user_id, :msg)
+    end
 end
+
+
