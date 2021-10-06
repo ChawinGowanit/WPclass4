@@ -1,6 +1,8 @@
 class UsersController < ApplicationController
   before_action :set_user, only: %i[ show edit update destroy ]
-
+  before_action :logged_in, except: %i[ login check invalid ]
+  before_action :check_permission, only: %i[edit update destroy] 
+  before_action :check_post_permission, only: %i[newpost addpost editpost deletepost] 
   # GET /users or /users.json
   def index
     @users = User.all
@@ -9,7 +11,11 @@ class UsersController < ApplicationController
   # GET /users/1 or /users/1.json
   def show
     @posts = User.find(@user.id).posts
-
+    if (logged_in)
+      @posts = User.find(@user.id).posts
+    else
+      return
+    end
   end
 
   # GET /users/new
@@ -67,7 +73,7 @@ class UsersController < ApplicationController
   end
 
   def login
-
+    session[:user_id] = nil
   end
 
   def check
@@ -77,6 +83,7 @@ class UsersController < ApplicationController
     @check = false
     if @u && @u.authenticate(@upass)
           redirect_to user_path(@u.id), notice: "User login."
+          session[:user_id] = @u.id
           check = true
     end
     if check == false
@@ -118,6 +125,32 @@ class UsersController < ApplicationController
   end
 
   private
+    def logged_in
+      if (session[:user_id])
+        return true
+      else
+        redirect_to main_path, notice: "Please login."
+      end
+    end
+
+    def check_permission
+      if (@user.id == session[:user_id])
+        return true
+      else
+        redirect_to "/users", notice: "You cant Edit/Update/Destroy other users."
+      end
+    end
+
+    def check_post_permission
+      @user = User.find(params[:user_id])
+      if (@user.id == session[:user_id])
+        return true
+      else
+        redirect_to user_url(@user.id), notice: "You cant Create/Edit/Update/Destroy other users posts."
+      end
+    end
+
+
     # Use callbacks to share common setup or constraints between actions.
     def set_user
       @user = User.find(params[:id])
