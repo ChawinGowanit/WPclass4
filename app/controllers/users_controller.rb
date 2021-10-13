@@ -1,8 +1,7 @@
 class UsersController < ApplicationController
   before_action :set_user, only: %i[ show edit update destroy ]
   before_action :logged_in, except: %i[ login check invalid ]
-  before_action :check_permission, only: %i[edit update destroy] 
-  before_action :check_post_permission, only: %i[newpost addpost editpost deletepost] 
+  before_action :check_permission, only: %i[ edit update destroy ] 
   # GET /users or /users.json
   def index
     @users = User.all
@@ -94,35 +93,6 @@ class UsersController < ApplicationController
   def invalid
   end
 
-  def newpost
-    @post = Post.new()
-    @post.user_id = params[:user_id]
-  end
-  def addpost
-      @post = Post.new(post_params)
-      if @post.save
-        redirect_to user_url(@post.user_id), notice: "Post was successfully created."
-      end
-  end
-    
-  def editpost
-      @user = User.find(params[:user_id])
-      @post = @user.posts.find(params[:post_id])
-  end
-    
-  def updatepost
-      @user = User.find(params[:user_id])
-      @post = @user.posts.find(params[:post_id])
-      @post.update(post_params)
-      redirect_to user_url(@user.id), notice: "Edit post successfully."
-  end
-    
-  def deletepost
-      @user = User.find(params[:user_id])
-      @post = @user.posts.find(params[:post_id])
-      @post.destroy()
-      redirect_to user_url(@user.id), notice: "Delete post successfully."
-  end
 
   private
     def logged_in
